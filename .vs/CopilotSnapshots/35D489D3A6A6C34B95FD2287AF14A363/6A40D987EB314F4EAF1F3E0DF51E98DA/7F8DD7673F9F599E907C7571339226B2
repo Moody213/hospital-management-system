@@ -1,0 +1,448 @@
+﻿{
+  "info": {
+    "name": "Hospital Management API",
+    "description": "Complete collection of API endpoints for Hospital Management System",
+    "version": "1.0.0"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@hospital.com\",\n  \"password\": \"Admin@123456\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"role\": \"Admin\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5001/api/auth/register",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@hospital.com\",\n  \"password\": \"Admin@123456\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5001/api/auth/login",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"YOUR_REFRESH_TOKEN_HERE\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5001/api/auth/refresh-token",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "auth", "refresh-token"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ACCESS_TOKEN_HERE"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"YOUR_REFRESH_TOKEN_HERE\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5001/api/auth/logout",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Doctors",
+      "item": [
+        {
+          "name": "Get All Doctors",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ACCESS_TOKEN_HERE"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5001/api/doctors",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "doctors"]
+            }
+          }
+        },
+        {
+          "name": "Get Doctor by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ACCESS_TOKEN_HERE"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5001/api/doctors/1",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "doctors", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Doctor (Admin Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ACCESS_TOKEN_HERE"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Smith\",\n  \"licenseNumber\": \"LIC123456\",\n  \"specialization\": \"Cardiology\",\n  \"email\": \"jane.smith@hospital.com\",\n  \"phoneNumber\": \"1234567890\",\n  \"yearsOfExperience\": 15,\n  \"password\": \"Doctor@123456\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5001/api/doctors",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "doctors"]
+            }
+          }
+        },
+        {
+          "name": "Update Doctor",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ACCESS_TOKEN_HERE"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"yearsOfExperience\": 16\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5001/api/doctors/1",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "doctors", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Doctor",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ACCESS_TOKEN_HERE"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5001/api/doctors/1",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "doctors", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Patients",
+      "item": [
+        {
+          "name": "Register Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Robert\",\n  \"lastName\": \"Johnson\",\n  \"age\": 45,\n  \"gender\": \"M\",\n  \"email\": \"robert.johnson@example.com\",\n  \"phoneNumber\": \"9876543210\",\n  \"address\": \"123 Main St, City\",\n  \"bloodType\": \"O+\",\n  \"emergencyContactName\": \"Sarah Johnson\",\n  \"emergencyContactPhone\": \"9876543211\",\n  \"password\": \"Patient@123456\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5001/api/patients",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "patients"]
+            }
+          }
+        },
+        {
+          "name": "Get All Patients (Admin/Doctor Only)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ACCESS_TOKEN_HERE"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5001/api/patients",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "patients"]
+            }
+          }
+        },
+        {
+          "name": "Update Patient",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ACCESS_TOKEN_HERE"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phoneNumber\": \"9876543212\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5001/api/patients/1",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "patients", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Appointments",
+      "item": [
+        {
+          "name": "Create Appointment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ACCESS_TOKEN_HERE"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"doctorId\": 1,\n  \"patientId\": 1,\n  \"appointmentDate\": \"2026-04-15T10:00:00\",\n  \"timeSlot\": \"10:00 AM\",\n  \"reason\": \"Regular checkup\",\n  \"notes\": \"Patient has been experiencing mild headaches\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5001/api/appointments",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "appointments"]
+            }
+          }
+        },
+        {
+          "name": "Get Doctor Appointments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ACCESS_TOKEN_HERE"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5001/api/appointments/doctor/1",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "appointments", "doctor", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Patient Appointments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ACCESS_TOKEN_HERE"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5001/api/appointments/patient/1",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "appointments", "patient", "1"]
+            }
+          }
+        },
+        {
+          "name": "Update Appointment",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ACCESS_TOKEN_HERE"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Completed\",\n  \"notes\": \"Checkup completed successfully\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5001/api/appointments/1",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "appointments", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Medical Records",
+      "item": [
+        {
+          "name": "Create Medical Record (Doctor Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ACCESS_TOKEN_HERE"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientId\": 1,\n  \"diagnosis\": \"Hypertension\",\n  \"recordDate\": \"2026-03-25T10:00:00\",\n  \"symptoms\": \"High blood pressure readings\",\n  \"treatment\": \"Prescribed antihypertensive medication\",\n  \"prescriptions\": \"Lisinopril 10mg daily\",\n  \"notes\": \"Patient to follow up in 2 weeks\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:5001/api/medicalrecords",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "medicalrecords"]
+            }
+          }
+        },
+        {
+          "name": "Get Patient Medical Records",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_ACCESS_TOKEN_HERE"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:5001/api/medicalrecords/patient/1",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "medicalrecords", "patient", "1"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
