@@ -230,10 +230,10 @@ This will:
 dotnet run
 ```
 
-The API will start at: `https://localhost:5001`
+The API will start at: `https://localhost:5000`
 
-Swagger UI: `https://localhost:5001/swagger/index.html`
-Hangfire Dashboard: `https://localhost:5001/hangfire`
+Swagger UI: `https://localhost:5000/swagger/index.html`
+Hangfire Dashboard: `https://localhost:5000/hangfire`
 
 ---
 
@@ -331,7 +331,7 @@ Patient (One) ──────► Insurance (One)
 
 ```bash
 # 1. Login to get tokens
-curl -X POST https://localhost:5001/api/auth/login \
+curl -X POST https://localhost:5000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","password":"Test@123456"}'
 
@@ -344,11 +344,11 @@ curl -X POST https://localhost:5001/api/auth/login \
 }
 
 # 2. Use AccessToken for API calls
-curl -X GET https://localhost:5001/api/patients/1 \
+curl -X GET https://localhost:5000/api/patients/1 \
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIs..."
 
 # 3. When token expires, refresh it
-curl -X POST https://localhost:5001/api/auth/refresh-token \
+curl -X POST https://localhost:5000/api/auth/refresh-token \
   -H "Content-Type: application/json" \
   -d '{"refreshToken":"abcd1234efgh5678..."}'
 ```
@@ -477,7 +477,7 @@ openssl rand -base64 32
 - **Purpose**: Patient retention (in production, would send emails/SMS)
 
 ### Access Hangfire Dashboard
-Navigate to: `https://localhost:5001/hangfire`
+Navigate to: `https://localhost:5000/hangfire`
 
 View:
 - Active jobs
