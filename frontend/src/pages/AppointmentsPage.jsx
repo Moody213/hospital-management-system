@@ -65,6 +65,10 @@ export default function AppointmentsPage() {
   useEffect(() => { fetchAll(); }, [role, entityId]);
 
   const openCreate = () => {
+    if (role === 'Patient' && !entityId) {
+      setError('Your patient profile is not fully set up yet. Please contact an administrator or log out and log back in.');
+      return;
+    }
     const base = { doctorId: '', patientId: '', appointmentDate: '', timeSlot: '', reason: '', notes: '' };
     if (role === 'Doctor') base.doctorId = entityId;
     if (role === 'Patient') base.patientId = entityId;
@@ -284,7 +288,7 @@ export default function AppointmentsPage() {
                   <div className="form-group">
                     <label>Patient</label>
                     <input
-                      value={user?.entityData ? `${user.entityData.firstName} ${user.entityData.lastName}` : `Patient #${entityId}`}
+                      value={user?.entityData ? `${user.entityData.firstName} ${user.entityData.lastName}` : entityId ? `Patient #${entityId}` : 'Profile not linked'}
                       disabled
                     />
                   </div>

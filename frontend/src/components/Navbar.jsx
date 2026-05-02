@@ -3,20 +3,20 @@ import { useAuth } from '../context/AuthContext';
 
 const NAV_BY_ROLE = {
   Admin: [
-    { to: '/', label: 'Dashboard' },
+    { to: '/dashboard', label: 'Dashboard' },
     { to: '/doctors', label: 'Doctors' },
     { to: '/patients', label: 'Patients' },
     { to: '/appointments', label: 'Appointments' },
     { to: '/medical-records', label: 'Medical Records' },
   ],
   Doctor: [
-    { to: '/', label: 'Dashboard' },
+    { to: '/dashboard', label: 'Dashboard' },
     { to: '/doctors', label: 'Doctors' },
     { to: '/appointments', label: 'Appointments' },
     { to: '/medical-records', label: 'Medical Records' },
   ],
   Patient: [
-    { to: '/', label: 'Dashboard' },
+    { to: '/dashboard', label: 'Dashboard' },
     { to: '/doctors', label: 'Doctors' },
     { to: '/appointments', label: 'Appointments' },
     { to: '/medical-records', label: 'Medical Records' },

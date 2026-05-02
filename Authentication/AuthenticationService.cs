@@ -1,3 +1,4 @@
+using HospitalManagementAPI.Data;
 using HospitalManagementAPI.DTOs;
 using HospitalManagementAPI.Models;
 using Microsoft.AspNetCore.Identity;
@@ -10,18 +11,24 @@ namespace HospitalManagementAPI.Authentication
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly JwtTokenService _jwtTokenService;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
 
         public AuthenticationService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
-            JwtTokenService jwtTokenService, RoleManager<IdentityRole> roleManager)
+            JwtTokenService jwtTokenService, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _jwtTokenService = jwtTokenService;
             _roleManager = roleManager;
+            _context = context;
         }
 
         public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request)
         {
+            // Admins can only be created by other admins or seeded on startup
+            if (string.Equals(request.Role, "Admin", StringComparison.OrdinalIgnoreCase))
+                return new AuthResponseDto { Success = false, Message = "Admin accounts cannot be self-registered." };
+
             var existingUser = await _userManager.FindByEmailAsync(request.Email);
             if (existingUser != null)
                 return new AuthResponseDto { Success = false, Message = "User already exists" };
@@ -42,6 +49,41 @@ namespace HospitalManagementAPI.Authentication
                 await _roleManager.CreateAsync(new IdentityRole(request.Role));
 
             await _userManager.AddToRoleAsync(user, request.Role);
+
+            // Auto-create linked entity record so /me endpoints return valid data
+            if (string.Equals(request.Role, "Patient", StringComparison.OrdinalIgnoreCase))
+            {
+                var patient = new Patient
+                {
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    Email = request.Email,
+                    Age = 0,
+                    Gender = "M",
+                    PhoneNumber = "0000000000",
+                    Address = "Not set",
+                    UserId = user.Id
+                };
+                _context.Patients.Add(patient);
+                await _context.SaveChangesAsync();
+            }
+            else if (string.Equals(request.Role, "Doctor", StringComparison.OrdinalIgnoreCase))
+            {
+                var doctor = new Doctor
+                {
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    Email = request.Email,
+                    LicenseNumber = "PENDING",
+                    Specialization = "General",
+                    PhoneNumber = "0000000000",
+                    YearsOfExperience = 0,
+                    IsActive = true,
+                    UserId = user.Id
+                };
+                _context.Doctors.Add(doctor);
+                await _context.SaveChangesAsync();
+            }
 
             var tokens = await _jwtTokenService.GenerateTokensAsync(user);
 

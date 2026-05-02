@@ -25,7 +25,7 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       await register(form);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       const msg =
         err.response?.data?.errors
@@ -103,7 +103,6 @@ export default function RegisterPage() {
           <div className="form-group">
             <label htmlFor="role">Role</label>
             <select id="role" name="role" value={form.role} onChange={handleChange}>
-              <option value="Admin">Admin</option>
               <option value="Doctor">Doctor</option>
               <option value="Patient">Patient</option>
             </select>

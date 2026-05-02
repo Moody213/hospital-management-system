@@ -25,7 +25,7 @@ export default function PatientsPage() {
 
   useEffect(() => {
     if (role === 'Patient') {
-      navigate('/', { replace: true });
+      navigate('/dashboard', { replace: true });
     }
   }, [role, navigate]);
   const [patients, setPatients] = useState([]);
