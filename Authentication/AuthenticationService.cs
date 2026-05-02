@@ -2,6 +2,7 @@ using HospitalManagementAPI.Data;
 using HospitalManagementAPI.DTOs;
 using HospitalManagementAPI.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace HospitalManagementAPI.Authentication
 {
@@ -62,6 +63,9 @@ namespace HospitalManagementAPI.Authentication
                     Gender = "M",
                     PhoneNumber = "0000000000",
                     Address = "Not set",
+                    BloodType = "Unknown",
+                    EmergencyContactName = "Not set",
+                    EmergencyContactPhone = "0000000000",
                     UserId = user.Id
                 };
                 _context.Patients.Add(patient);
@@ -104,6 +108,51 @@ namespace HospitalManagementAPI.Authentication
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, false, false);
             if (!result.Succeeded)
                 return new AuthResponseDto { Success = false, Message = "Invalid email or password" };
+
+            // Ensure entity record exists for pre-existing accounts that were created before auto-creation was added
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles.Contains("Patient"))
+            {
+                var exists = await _context.Patients.AnyAsync(p => p.UserId == user.Id);
+                if (!exists)
+                {
+                    _context.Patients.Add(new Patient
+                    {
+                        FirstName = user.FirstName ?? "Unknown",
+                        LastName = user.LastName ?? "Unknown",
+                        Email = user.Email!,
+                        Age = 0,
+                        Gender = "M",
+                        PhoneNumber = "0000000000",
+                        Address = "Not set",
+                        BloodType = "Unknown",
+                        EmergencyContactName = "Not set",
+                        EmergencyContactPhone = "0000000000",
+                        UserId = user.Id
+                    });
+                    await _context.SaveChangesAsync();
+                }
+            }
+            else if (roles.Contains("Doctor"))
+            {
+                var exists = await _context.Doctors.AnyAsync(d => d.UserId == user.Id);
+                if (!exists)
+                {
+                    _context.Doctors.Add(new Doctor
+                    {
+                        FirstName = user.FirstName ?? "Unknown",
+                        LastName = user.LastName ?? "Unknown",
+                        Email = user.Email!,
+                        LicenseNumber = "PENDING",
+                        Specialization = "General",
+                        PhoneNumber = "0000000000",
+                        YearsOfExperience = 0,
+                        IsActive = true,
+                        UserId = user.Id
+                    });
+                    await _context.SaveChangesAsync();
+                }
+            }
 
             var tokens = await _jwtTokenService.GenerateTokensAsync(user);
 

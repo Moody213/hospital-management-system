@@ -56,8 +56,15 @@ namespace HospitalManagementAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var appointment = await _service.CreateAppointmentAsync(dto);
-            return CreatedAtAction(nameof(GetAppointmentById), new { id = appointment.AppointmentId }, appointment);
+            try
+            {
+                var appointment = await _service.CreateAppointmentAsync(dto);
+                return CreatedAtAction(nameof(GetAppointmentById), new { id = appointment.AppointmentId }, appointment);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
@@ -75,6 +82,10 @@ namespace HospitalManagementAPI.Controllers
             catch (KeyNotFoundException)
             {
                 return NotFound();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
             }
         }
 

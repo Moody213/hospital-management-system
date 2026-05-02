@@ -13,10 +13,6 @@ namespace HospitalManagementAPI.DTOs
         [Required]
         public DateTime AppointmentDate { get; set; }
 
-        [Required]
-        [MaxLength(50)]
-        public string TimeSlot { get; set; }
-
         [MaxLength(500)]
         public string Reason { get; set; }
 

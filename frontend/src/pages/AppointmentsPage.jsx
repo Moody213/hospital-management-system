@@ -69,7 +69,7 @@ export default function AppointmentsPage() {
       setError('Your patient profile is not fully set up yet. Please contact an administrator or log out and log back in.');
       return;
     }
-    const base = { doctorId: '', patientId: '', appointmentDate: '', timeSlot: '', reason: '', notes: '' };
+    const base = { doctorId: '', patientId: '', appointmentDate: '', reason: '', notes: '' };
     if (role === 'Doctor') base.doctorId = entityId;
     if (role === 'Patient') base.patientId = entityId;
     setForm(base);
@@ -81,7 +81,7 @@ export default function AppointmentsPage() {
     setForm({
       doctorId: a.doctorId, patientId: a.patientId,
       appointmentDate: a.appointmentDate?.slice(0, 16) || '',
-      timeSlot: a.timeSlot, reason: a.reason || '', notes: a.notes || '',
+      reason: a.reason || '', notes: a.notes || '',
       status: a.status,
     });
     setModal('edit');
@@ -127,7 +127,6 @@ export default function AppointmentsPage() {
       };
       if (role !== 'Doctor') {
         updatePayload.appointmentDate = form.appointmentDate || undefined;
-        updatePayload.timeSlot = form.timeSlot || undefined;
         updatePayload.reason = form.reason || undefined;
       }
       await updateAppointment(selected.appointmentId, updatePayload);
@@ -207,8 +206,7 @@ export default function AppointmentsPage() {
                   <th>ID</th>
                   <th>Doctor</th>
                   {role !== 'Patient' && <th>Patient</th>}
-                  <th>Date</th>
-                  <th>Time Slot</th>
+                  <th>Date &amp; Time</th>
                   <th>Reason</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -216,14 +214,13 @@ export default function AppointmentsPage() {
               </thead>
               <tbody>
                 {filtered.length === 0 ? (
-                  <tr><td colSpan={role !== 'Patient' ? 8 : 7} className="text-center text-muted">No appointments found.</td></tr>
+                  <tr><td colSpan={role !== 'Patient' ? 7 : 6} className="text-center text-muted">No appointments found.</td></tr>
                 ) : filtered.map((a) => (
                   <tr key={a.appointmentId}>
                     <td>{a.appointmentId}</td>
                     <td>{getDoctorName(a.doctorId)}</td>
                     {role !== 'Patient' && <td>{getPatientName(a.patientId)}</td>}
-                    <td>{new Date(a.appointmentDate).toLocaleDateString()}</td>
-                    <td>{a.timeSlot}</td>
+                    <td>{new Date(a.appointmentDate).toLocaleString()}</td>
                     <td className="truncate">{a.reason || '—'}</td>
                     <td>
                       <span className={`badge badge--${(a.status || '').toLowerCase()}`}>
@@ -294,15 +291,9 @@ export default function AppointmentsPage() {
                   </div>
                 )}
               </div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Appointment Date *</label>
-                  <input type="datetime-local" name="appointmentDate" value={form.appointmentDate} onChange={handleChange} required />
-                </div>
-                <div className="form-group">
-                  <label>Time Slot *</label>
-                  <input name="timeSlot" value={form.timeSlot} onChange={handleChange} required placeholder="e.g. 10:00 AM" />
-                </div>
+              <div className="form-group">
+                <label>Appointment Date &amp; Time *</label>
+                <input type="datetime-local" name="appointmentDate" value={form.appointmentDate} onChange={handleChange} required />
               </div>
               <div className="form-group">
                 <label>Reason</label>
@@ -334,15 +325,9 @@ export default function AppointmentsPage() {
             {error && <div className="alert alert-error">{error}</div>}
             <form onSubmit={handleUpdate}>
               {role !== 'Doctor' && (
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Appointment Date</label>
-                    <input type="datetime-local" name="appointmentDate" value={form.appointmentDate} onChange={handleChange} />
-                  </div>
-                  <div className="form-group">
-                    <label>Time Slot</label>
-                    <input name="timeSlot" value={form.timeSlot} onChange={handleChange} />
-                  </div>
+                <div className="form-group">
+                  <label>Appointment Date &amp; Time</label>
+                  <input type="datetime-local" name="appointmentDate" value={form.appointmentDate} onChange={handleChange} />
                 </div>
               )}
               <div className="form-row">
@@ -388,8 +373,7 @@ export default function AppointmentsPage() {
               {role !== 'Patient' && (
                 <div className="detail-item"><span className="detail-label">Patient</span><span>{getPatientName(selected.patientId)}</span></div>
               )}
-              <div className="detail-item"><span className="detail-label">Date</span><span>{new Date(selected.appointmentDate).toLocaleString()}</span></div>
-              <div className="detail-item"><span className="detail-label">Time Slot</span><span>{selected.timeSlot}</span></div>
+              <div className="detail-item"><span className="detail-label">Date &amp; Time</span><span>{new Date(selected.appointmentDate).toLocaleString()}</span></div>
               <div className="detail-item"><span className="detail-label">Status</span>
                 <span className={`badge badge--${(selected.status || '').toLowerCase()}`}>{selected.status}</span>
               </div>

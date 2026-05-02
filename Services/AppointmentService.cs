@@ -48,12 +48,21 @@ namespace HospitalManagementAPI.Services
 
         public async Task<AppointmentReadDto> CreateAppointmentAsync(AppointmentCreateDto dto)
         {
+            // Overlap check: doctor cannot have two appointments within 1 hour of each other
+            var existingDates = await _context.Appointments
+                .Where(a => a.DoctorId == dto.DoctorId && a.Status != "Cancelled")
+                .Select(a => a.AppointmentDate)
+                .ToListAsync();
+
+            if (existingDates.Any(d => Math.Abs((d - dto.AppointmentDate).TotalMinutes) < 60))
+                throw new InvalidOperationException("This doctor already has an appointment within 1 hour of the selected time. Please choose a different time slot.");
+
             var appointment = new Appointment
             {
                 DoctorId = dto.DoctorId,
                 PatientId = dto.PatientId,
                 AppointmentDate = dto.AppointmentDate,
-                TimeSlot = dto.TimeSlot,
+                TimeSlot = dto.AppointmentDate.ToString("h:mm tt"),
                 Reason = dto.Reason,
                 Notes = dto.Notes,
                 Status = "Scheduled"
@@ -73,9 +82,19 @@ namespace HospitalManagementAPI.Services
                 throw new KeyNotFoundException("Appointment not found");
 
             if (dto.AppointmentDate.HasValue)
+            {
+                // Overlap check on reschedule (exclude the current appointment)
+                var existingDates = await _context.Appointments
+                    .Where(a => a.DoctorId == appointment.DoctorId && a.AppointmentId != id && a.Status != "Cancelled")
+                    .Select(a => a.AppointmentDate)
+                    .ToListAsync();
+
+                if (existingDates.Any(d => Math.Abs((d - dto.AppointmentDate.Value).TotalMinutes) < 60))
+                    throw new InvalidOperationException("This doctor already has an appointment within 1 hour of the selected time. Please choose a different time slot.");
+
                 appointment.AppointmentDate = dto.AppointmentDate.Value;
-            if (!string.IsNullOrEmpty(dto.TimeSlot))
-                appointment.TimeSlot = dto.TimeSlot;
+                appointment.TimeSlot = dto.AppointmentDate.Value.ToString("h:mm tt");
+            }
             if (!string.IsNullOrEmpty(dto.Reason))
                 appointment.Reason = dto.Reason;
             if (!string.IsNullOrEmpty(dto.Status))
