@@ -26,6 +26,14 @@ namespace HospitalManagementAPI.Services
             return doctor == null ? null : MapToReadDto(doctor);
         }
 
+        public async Task<DoctorReadDto> GetDoctorByUserIdAsync(string userId)
+        {
+            var doctor = await _context.Doctors
+                .Include(d => d.DoctorProfile)
+                .FirstOrDefaultAsync(d => d.UserId == userId);
+            return doctor == null ? null : MapToReadDto(doctor);
+        }
+
         public async Task<IEnumerable<DoctorReadDto>> GetAllDoctorsAsync()
         {
             var doctors = await _context.Doctors
@@ -55,7 +63,7 @@ namespace HospitalManagementAPI.Services
 
             var result = await _userManager.CreateAsync(user, dto.Password);
             if (!result.Succeeded)
-                throw new InvalidOperationException("Failed to create user");
+                throw new InvalidOperationException(string.Join("; ", result.Errors.Select(e => e.Description)));
 
             await _userManager.AddToRoleAsync(user, "Doctor");
 

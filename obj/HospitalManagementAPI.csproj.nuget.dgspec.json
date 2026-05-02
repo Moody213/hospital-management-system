@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Omar El-Sayed\\Downloads\\HospitalManagementAPI\\HospitalManagementAPI\\HospitalManagementAPI.csproj": {}
+    "E:\\full-stack-training\\parts\\hospital-management-system\\HospitalManagementAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Omar El-Sayed\\Downloads\\HospitalManagementAPI\\HospitalManagementAPI\\HospitalManagementAPI.csproj": {
+    "E:\\full-stack-training\\parts\\hospital-management-system\\HospitalManagementAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Omar El-Sayed\\Downloads\\HospitalManagementAPI\\HospitalManagementAPI\\HospitalManagementAPI.csproj",
+        "projectUniqueName": "E:\\full-stack-training\\parts\\hospital-management-system\\HospitalManagementAPI.csproj",
         "projectName": "HospitalManagementAPI",
-        "projectPath": "C:\\Users\\Omar El-Sayed\\Downloads\\HospitalManagementAPI\\HospitalManagementAPI\\HospitalManagementAPI.csproj",
-        "packagesPath": "C:\\Users\\Omar El-Sayed\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Omar El-Sayed\\Downloads\\HospitalManagementAPI\\HospitalManagementAPI\\obj\\",
+        "projectPath": "E:\\full-stack-training\\parts\\hospital-management-system\\HospitalManagementAPI.csproj",
+        "packagesPath": "C:\\Users\\10\\.nuget\\packages\\",
+        "outputPath": "E:\\full-stack-training\\parts\\hospital-management-system\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Omar El-Sayed\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\10\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -48,11 +46,11 @@
           "dependencies": {
             "Hangfire.AspNetCore": {
               "target": "Package",
-              "version": "[1.7.36, )"
+              "version": "[1.8.17, )"
             },
-            "Hangfire.SqlServer": {
+            "Hangfire.InMemory": {
               "target": "Package",
-              "version": "[1.7.36, )"
+              "version": "[0.4.1, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
@@ -70,7 +68,7 @@
               "target": "Package",
               "version": "[8.0.0, )"
             },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
+            "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
               "version": "[8.0.0, )"
             },
@@ -97,19 +95,19 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.25, 8.0.25]"
+              "version": "[8.0.26, 8.0.26]"
             },
             {
               "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[8.0.25, 8.0.25]"
+              "version": "[8.0.26, 8.0.26]"
             },
             {
               "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.25, 8.0.25]"
+              "version": "[8.0.26, 8.0.26]"
             },
             {
               "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[8.0.25, 8.0.25]"
+              "version": "[8.0.26, 8.0.26]"
             }
           ],
           "frameworkReferences": {
@@ -120,7 +118,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

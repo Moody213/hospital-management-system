@@ -5,6 +5,7 @@ namespace HospitalManagementAPI.Services
     public interface IDoctorService
     {
         Task<DoctorReadDto> GetDoctorByIdAsync(int id);
+        Task<DoctorReadDto> GetDoctorByUserIdAsync(string userId);
         Task<IEnumerable<DoctorReadDto>> GetAllDoctorsAsync();
         Task<IEnumerable<DoctorReadDto>> GetDoctorsBySpecializationAsync(string specialization);
         Task<DoctorReadDto> CreateDoctorAsync(DoctorCreateDto dto);

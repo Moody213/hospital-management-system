@@ -25,6 +25,17 @@ namespace HospitalManagementAPI.Controllers
             return Ok(patients);
         }
 
+        [HttpGet("me")]
+        [Authorize(Roles = "Patient")]
+        public async Task<ActionResult<PatientReadDto>> GetMyProfile()
+        {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null) return Unauthorized();
+            var patient = await _service.GetPatientByUserIdAsync(userId);
+            if (patient == null) return NotFound();
+            return Ok(patient);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<PatientReadDto>> GetPatientById(int id)
         {
@@ -42,8 +53,15 @@ namespace HospitalManagementAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var patient = await _service.CreatePatientAsync(dto);
-            return CreatedAtAction(nameof(GetPatientById), new { id = patient.PatientId }, patient);
+            try
+            {
+                var patient = await _service.CreatePatientAsync(dto);
+                return CreatedAtAction(nameof(GetPatientById), new { id = patient.PatientId }, patient);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]

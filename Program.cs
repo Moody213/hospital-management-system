@@ -15,8 +15,8 @@ using Hangfire;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection") ?? "Server=(localdb)\\mssqllocaldb;Database=HospitalDb;Trusted_Connection=true;"
+    options.UseSqlite(
+        builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=hospital.db"
     )
 );
 
@@ -80,7 +80,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddHangfire(config => config.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddHangfire(config => config.UseInMemoryStorage());
 builder.Services.AddHangfireServer();
 
 builder.Services.AddScoped<IGenericRepository<Doctor>, GenericRepository<Doctor>>();
@@ -105,15 +105,34 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    
-    context.Database.Migrate();
-    
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+    context.Database.EnsureCreated();
+
     if (!roleManager.RoleExistsAsync("Admin").Result)
         roleManager.CreateAsync(new IdentityRole("Admin")).Wait();
     if (!roleManager.RoleExistsAsync("Doctor").Result)
         roleManager.CreateAsync(new IdentityRole("Doctor")).Wait();
     if (!roleManager.RoleExistsAsync("Patient").Result)
         roleManager.CreateAsync(new IdentityRole("Patient")).Wait();
+
+    // Seed default admin account
+    const string adminEmail = "admin@hospital.com";
+    if (userManager.FindByEmailAsync(adminEmail).Result == null)
+    {
+        var adminUser = new ApplicationUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            FirstName = "John",
+            LastName = "Doe",
+            IsActive = true,
+            EmailConfirmed = true
+        };
+        var result = userManager.CreateAsync(adminUser, "Admin@123456").Result;
+        if (result.Succeeded)
+            userManager.AddToRoleAsync(adminUser, "Admin").Wait();
+    }
 }
 
 if (app.Environment.IsDevelopment())

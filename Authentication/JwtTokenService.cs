@@ -26,7 +26,8 @@ namespace HospitalManagementAPI.Authentication
 
         public async Task<LoginResponseDto> GenerateTokensAsync(ApplicationUser user)
         {
-            var accessToken = GenerateAccessToken(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            var accessToken = GenerateAccessToken(user, roles);
             var refreshToken = GenerateRefreshToken();
 
             var refreshTokenEntity = new RefreshToken
@@ -39,8 +40,6 @@ namespace HospitalManagementAPI.Authentication
             await _refreshTokenRepository.AddAsync(refreshTokenEntity);
             await _refreshTokenRepository.SaveAsync();
 
-            var roles = await _userManager.GetRolesAsync(user);
-
             return new LoginResponseDto
             {
                 AccessToken = accessToken,
@@ -50,7 +49,7 @@ namespace HospitalManagementAPI.Authentication
             };
         }
 
-        public string GenerateAccessToken(ApplicationUser user)
+        public string GenerateAccessToken(ApplicationUser user, IList<string>? roles = null)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -61,6 +60,12 @@ namespace HospitalManagementAPI.Authentication
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}")
             };
+
+            if (roles != null)
+            {
+                foreach (var role in roles)
+                    claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
